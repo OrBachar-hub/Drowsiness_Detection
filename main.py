@@ -12,9 +12,8 @@ import os
 from keras.models import load_model
 from pygame import mixer
 import numpy as np 
+from pygame.locals import *
 
-fla = 1
-flag2 = True
 def StartCamera(volume):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
     mixer.init()
@@ -37,13 +36,7 @@ def StartCamera(volume):
         predictions = []
         left_eye = leye.detectMultiScale(img_gray)
         right_eye =  reye.detectMultiScale(img_gray)
-        faces = faceCascade.detectMultiScale(
-                img_gray,
-                scaleFactor=1.1,
-                minNeighbors=5,
-                minSize=(30, 30),
-                # flags = cv2.CV_HAAR_SCALE_IMAGE
-            )
+        faces = faceCascade.detectMultiScale(img_gray,scaleFactor=1.1,minNeighbors=5,minSize=(30, 30))
         if len(faces) > 0:
             #   choose the closest face
             persons = [(x, y, w, h, w * h) for (x, y, w, h) in faces]
@@ -78,7 +71,7 @@ def StartCamera(volume):
             if(score<0):
                 score=0   
             cv2.putText(img,'Score:'+str(score),(100,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
-            if(score>7):
+            if(score>6):
                 cv2.imwrite(os.path.join(path,'image.jpg'),img)
                 try:
                     sound.play()
